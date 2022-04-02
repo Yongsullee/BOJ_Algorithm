@@ -2,7 +2,7 @@
 #define MAX 9
 using namespace std;
 
-int n, m;
+i nt n, m;
 int arr[MAX] = {
     0,
 };
