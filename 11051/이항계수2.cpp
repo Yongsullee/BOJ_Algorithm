@@ -8,7 +8,6 @@
         4. 추가적으로, if N=0, C(N,K) = 0 이며, if K=0, C(N,K) = 1
         5. 동적 계획법을 통해 DP[N][K] 의 값을 구합니다.
 */
-
 #include <iostream>
 typedef long long ll;
 using namespace std;
