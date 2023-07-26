@@ -1,36 +1,38 @@
+/*
+    문제 :
+        동적 계획법을 활용해 파도반 수열을 구현합니다.
+    설명 :
+        1. 파도반 수열의 점화식
+            P(n) = P(n-2) + P(n-3), n >= 4
+            P(n) = 1, n = 1, 2, 3
+        2. 자료형 주의, 피보나치 수열과 마찬가지로 수가 기하급수적으로 커집니다.
+*/
+
 #include <iostream>
+#include <vector>
 using namespace std;
 
-/*
-    풀이:
-        규칙을 찾고, DP를 이용합니다.
+long long dp[101] = {0, 1, 1, 1};
 
-        1.  P(N) = P(N-2) + P(N-3)
-        2.  이때, 데이터 크기를 주의해야합니다.
-            특히, 피보나치 수열의 경우 값이 급진적으로 증가하므로, 자료형에 주의해야합니다.
-*/
-long long answer[101] = {
-    0,
-    1,
-    1,
-};
-
-long long Padovan(int num)
+long long PadovanDP(int n)
 {
-    if (num < 3)
-        return answer[num];
-    else if (answer[num] == 0)
-        answer[num] = Padovan(num - 2) + Padovan(num - 3);
-    return answer[num];
+    for(int i=4; i<= n; i++)
+    {
+        dp[i] = dp[i-2] + dp[i-3];
+    }
+
+    return dp[n];
 }
 
 int main()
 {
+    ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
+    
     int T, N;
     cin >> T;
     for (int i = 0; i < T; i++)
     {
         cin >> N;
-        cout << Padovan(N) << '\n';
+        cout << PadovanDP(N) << '\n';
     }
 }
