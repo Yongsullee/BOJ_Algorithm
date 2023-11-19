@@ -1,95 +1,110 @@
-/*
-    주의할 점: 2자리 이상 숫자를 저장하기 위해서 isdigit()과 string 활용
-*/
-
 #include <iostream>
-#include <queue>
+#include <deque>
 using namespace std;
+
+int T;
 
 int main()
 {
     ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
     
-    int T,N;
-    
     cin >> T;
     
     while(T--)
     {
-        string orders, numStr;
-        bool reverse = false, error = false;
+        // funStr : 수행할 함수를 담고 있는 문자열
+        // numStr : 배열을 담고 있는 문자열
+        string funStr, numStr;
+        int n;
         deque<int> dq;
         
-        cin >> orders;
-        cin >> N;
+        cin >> funStr;
+        cin >> n;
         cin >> numStr;
         
-        string num = "";
-        for(int i=0; i<numStr.length(); i++)
+        string resStr = "";
+        // #1. [x1, x2, ...] 배열을 순서대로 덱에 삽입 하는 작업
+        for(int i=0; i<numStr.size(); i++)
         {
+            // #1. numStr에서 숫자를 만날 경우
             if(isdigit(numStr[i]))
             {
-                num += numStr[i];
+                resStr += numStr[i];
             }
-            else if(numStr[i] == ',' || numStr[i] == ']')
+            // #2. numStr에서 ']' 혹은 ','를 만날 경우
+            else if(numStr[i] == ']' ||
+                   numStr[i] == ',')
             {
-                if(!num.empty())
+                if(!resStr.empty())
                 {
-                    dq.push_back(stoi(num));
-                    num.clear();
+                    dq.push_back(stoi(resStr));
+                    resStr.clear(); 
                 }
             }
         }
         
-        for(const auto& order : orders)
+        // 덱의 역순 여부
+        bool reverse = false;
+        // 덱의 에러 발생 여부(비어 있는 덱에서 D연산 수행할 경우)
+        bool error = false; 
+        // #2. funStr을 순서대로 순회하며 'R' 혹은 'D'에 해당되는 작업 수행
+        for(const auto& func : funStr)
         {
-            if(order == 'R')
+            // #1. 'R' : 덱의 순서 뒤집기
+            if(func == 'R')
             {
                 reverse = !reverse;
             }
-            else
+            // #2. 'D' : 덱의 첫 번째 원소 제거
+            else if(func == 'D')
             {
-                if(dq.empty())
+                // #1. 비어있지 않을 경우
+                if(!dq.empty())
+                {
+                    //역순이면 마지막 원소 제거, 원순 이면 첫 번째 원소 제거
+                    reverse ? dq.pop_back() : dq.pop_front();
+                }
+                // #2. 비어있을 경우
+                else
                 {
                     error = true;
                     break;
                 }
-                else
-                {
-                    reverse ? dq.pop_back() : dq.pop_front();
-                }
             }
         }
-        if(!error)
+        // #3. 만약, 에러가 발생했다면?
+        if(error)
+        {
+            cout << "error" << '\n';
+        }
+        // #4. 만약, 에러가 발생하지 않았다면?
+        else
         {
             cout << '[';
             if(!dq.empty())
             {
+                // #1. 역순으로 출력, rbegin과 rend 활용
                 if(reverse)
                 {
-                    for(auto it=dq.rbegin(); it!=dq.rend(); ++it)
+                    for(auto it = rbegin(dq); it != rend(dq); ++it)
                     {
-                        cout << *it;
-                        if(it != dq.rend()-1)
+                        cout << *(it);
+                        if(it != rend(dq)-1)
                             cout << ',';
                     }
                 }
+                // #2. 원래 순서로 출력, begin과 end 활용
                 else
                 {
-                    for(auto it=dq.begin(); it!=dq.end(); ++it)
+                    for(auto it  = begin(dq); it != end(dq); ++it)
                     {
-                        cout << *it;
-                        if(it != dq.end()-1)
+                        cout << *(it);
+                        if(it != end(dq)-1)
                             cout << ',';
                     }
                 }
             }
             cout << ']' << '\n';
         }
-        else
-        {
-            cout << "error\n";
-        }
     }
-    
 }
