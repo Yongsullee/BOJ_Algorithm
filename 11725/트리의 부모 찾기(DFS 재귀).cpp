@@ -1,48 +1,53 @@
 #include <iostream>
 #include <vector>
+#include <unordered_map>
+#include <climits>
 using namespace std;
 
-vector<int> graph[100001];
-int ans[100001];
-bool visited[100001] = {0,};
+int N;
 
-void DFS(int start)
+void DFS(int cur, unordered_map<int, vector<int>>& tree, vector<bool>& visited, vector<int>& parent)
 {
-    visited[start] = true;
-    for(int i=0; i<graph[start].size(); i++)
+    visited[cur] = true;
+    for(const auto& next : tree[cur])
     {
-        int neighbor = graph[start][i];
-        if(!visited[neighbor])
+        if(!visited[next] && parent[next] == INT_MAX)
         {
-            ans[neighbor] = start;
-            DFS(neighbor);
+            parent[next] = cur;
+            DFS(next, tree, visited, parent);
         }
     }
 }
 
 int main()
 {
-    ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
-    
-    int N;
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
     
     cin >> N;
     
-    for(int i=1; i<=N; i++)
+    // unordered_map 형식의 트리
+    unordered_map<int, vector<int>> tree;
+    // 방문 여부
+    vector<bool> visited(N+1, false);
+    // 부모 노드 목록
+    vector<int> parent(N+1, INT_MAX);
+    
+    for(int i=0; i<N-1; i++)
     {
-        int x,y;
-        cin >> x;
-        cin >> y;
+        int parent, child;
         
-        graph[x].push_back(y);
-        graph[y].push_back(x);
+        cin >> parent >> child;
+        // 트리 구성
+        tree[parent].push_back(child);
+        tree[child].push_back(parent);
     }
     
-    DFS(1);
+    DFS(1, tree, visited, parent);
     
     for(int i=2; i<=N; i++)
-    {
-        cout << ans[i] << '\n';
-    }
+        cout << parent[i] << '\n';
     
+    return 0;
 }
