@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": ".",
-      "program": "build/Debug/outDebug",
+      "cwd": "c:/Users/u/Desktop/개발/BOJ/BasicCodeTemplate",
+      "program": "c:/Users/u/Desktop/개발/BOJ/BasicCodeTemplate/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "C:/MinGW/bin/gdb.exe",
       "setupCommands": [
