@@ -1,47 +1,40 @@
 #include <iostream>
 #include <vector>
-#include <string>
 #include <queue>
 #include <climits>
 using namespace std;
 
-int N, M, X, res;
-// #1. 그래프 선언, 2차원 벡터와 pair< 가중치, 도착 정점 > 형식
-vector<vector<pair<int,int>>> graph;
-// #2. 최단 경로 비용 목록
-vector<int> dist, finDist;
+int N, M, X;
 
-void dijkstra(int start)
+vector<int> dijkstra(int start, vector<vector<pair<int, int>>>& graph)
 {
-    dist.clear();
-    dist.resize(N+1, INT_MAX);
-    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
-    
-    dist[start] = 0;
+    vector<int> distance(N + 1, INT_MAX);
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    distance[start] = 0;
     pq.push({0, start});
-    
-    while(!pq.empty())
+
+    while (!pq.empty())
     {
-        int cur = pq.top().second;
-        int weight = pq.top().first;
-        
+        int cur_vertex = pq.top().second;
+        int cur_weight = pq.top().first;
         pq.pop();
-        
-        if(weight > dist[cur])
+
+        if (cur_weight > distance[cur_vertex])
             continue;
-        
-        for(const auto& edge : graph[cur])
+
+        for (const auto& edge : graph[cur_vertex])
         {
             int neighbor = edge.second;
-            int new_dist = weight + edge.first;
-            
-            if(new_dist < dist[neighbor])
+            int new_dist = cur_weight + edge.first;
+
+            if (new_dist < distance[neighbor])
             {
+                distance[neighbor] = new_dist;
                 pq.push({new_dist, neighbor});
-                dist[neighbor] = new_dist;
             }
         }
     }
+    return distance;
 }
 
 int main()
@@ -51,33 +44,32 @@ int main()
     cout.tie(0);
 
     cin >> N >> M >> X;
-    
-    graph.resize(N+1);
-    dist.resize(N+1, INT_MAX);
-    finDist.resize(N+1, 0);
-    
-    while(M--)
+
+    vector<vector<pair<int, int>>> graph(N + 1);
+    vector<vector<pair<int, int>>> reversed_graph(N + 1);
+
+    while (M--)
     {
         int start, end, weight;
         cin >> start >> end >> weight;
-        
+
         graph[start].push_back({weight, end});
+        reversed_graph[end].push_back({weight, start});
     }
-    
-    // #2-1. 다익스트라 : 각 정점으로 부터 X까지 걸리는 최단 경로 비용
-    for(int i=1; i<=N; ++i)
+
+    vector<int> distance_from_X = dijkstra(X, graph);
+    vector<int> distance_to_X = dijkstra(X, reversed_graph);
+
+    int maxDist = 0;
+    for (int i = 1; i <= N; ++i)
     {
-        dijkstra(i);
-        finDist[i] = dist[X];
+        if (distance_from_X[i] != INT_MAX && distance_to_X[i] != INT_MAX)
+        {
+            maxDist = max(maxDist, distance_from_X[i] + distance_to_X[i]);
+        }
     }
-    dijkstra(X);
-    for(int i=1; i<=N; ++i)
-    {
-        finDist[i] += dist[i];
-        res = max(res, finDist[i]);    
-    }
-    
-    cout << res;
-    
+
+    cout << maxDist;
+
     return 0;
 }
