@@ -12,10 +12,12 @@ struct edge {
 	int s, e, t;
 };
 
+// 벨만-포드 알고리즘, 시작 정점은 무작위로 임의의 정점으로 설정해도 문제가 없습니다.
 bool time_travel(int n, vector<edge> edges) {
 	vector<int> dist(n + 1, MAX);
 
 	int s, e, t;
+
 	dist[1] = 0;
 	for (int i = 1; i < n; i++) {
 		for (int j = 0; j < edges.size(); j++) {
