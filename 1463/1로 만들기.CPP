@@ -31,7 +31,7 @@ int main()
         // #2. /2 연산
         if (i % 2 == 0)
             dp[i] = min(dp[i], dp[i / 2] + 1);
-
+        // #3. /3 연산
         if (i % 3 == 0)
             dp[i] = min(dp[i], dp[i / 3] + 1);
     }
