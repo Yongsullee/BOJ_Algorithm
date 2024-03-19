@@ -29,7 +29,10 @@
   ],
   "files.associations": {
     "ios": "cpp",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "vector": "cpp",
+    "queue": "cpp",
+    "stack": "cpp"
   },
   "C_Cpp_Runner.useMsvc": false,
   "C_Cpp_Runner.msvcWarnings": [
