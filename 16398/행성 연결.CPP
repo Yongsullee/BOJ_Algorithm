@@ -1,3 +1,10 @@
+/*
+    [문제] : 각 행성을 모두 연결하는 최소 신장 트리 비용
+    [설명]
+            1. 크루스칼 알고리즘 활용
+            2. 크루스칼 알고리즘은 간선 중심의 알고리즘으로, 간선 목록 만들기 + Union-Find 연산 구현
+*/
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
